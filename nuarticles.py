@@ -49,6 +49,17 @@ nulinks = list(set(nulinks))
 nulinks = ['https://insight.kellogg.northwestern.edu' + link for link in nulinks]
 #nulinks is now a list of urls for all useful articles on the site without any repeats
 
+# def compareDate(string)
+# Write this so it compares it to the current date and returns true if it is newer than two weeks old, false otherwise
+
+
+for link in nulinks:
+	reqNUarticle = requests.get(link)
+	soupNUarticle = BeautifulSoup(reqNUarticle.text, 'html.parser')
+	date = soupNUarticle.find('span', class_ = 'time')
+	date = ''.join(date.strings)
+	print(date)
+
 #Want to remove all the article that are over two weeks old
 
-print(nulinks)
+# print(nulinks)
