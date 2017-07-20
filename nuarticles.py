@@ -1,5 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
+import datetime
+from remove_duplicates_from_list import removeDuplicates
 
 ####
 #### Northwestern Insight KELLOGG School of Managment Website ####
@@ -45,21 +47,90 @@ for li in soupTrust.find_all('li', class_ = 'with-image'):
 	nulinks.append(link)
 #Adds the second half of the url for an article to nulinks
 
-nulinks = list(set(nulinks))
+nulinks = removeDuplicates(nulinks)
 nulinks = ['https://insight.kellogg.northwestern.edu' + link for link in nulinks]
 #nulinks is now a list of urls for all useful articles on the site without any repeats
 
-# def compareDate(string)
-# Write this so it compares it to the current date and returns true if it is newer than two weeks old, false otherwise
 
+today = datetime.date.today()
+def compareDate(datestring):
+	monthstr = datestring[1:4]
+	daystr = datestring[5]
+	yearstr = datestring[8:12]
+
+	#Converting the month to an int
+	if monthstr == 'Jan':
+		month = 1
+	elif monthstr == 'Feb':
+		month = 2
+	elif monthstr == 'Mar':
+		month = 3
+	elif monthstr == 'Apr':
+		month = 4
+	elif monthstr == 'May':
+		month = 5
+	elif monthstr == 'Jun':
+		month = 6
+	elif monthstr == 'Jul':
+		month = 7
+	elif monthstr == 'Aug':
+		month = 8
+	elif monthstr == 'Sep':
+		month = 9
+	elif monthstr == 'Oct':
+		month = 10
+	elif monthstr == 'Nov':
+		month = 11
+	elif monthstr == 'Dec':
+		month = 12
+
+	#Converting the day and year to ints
+	day = int(daystr)
+	year = int(yearstr)
+
+	#Finding the difference in days between today and each article
+	sitedate = datetime.date(year, month, day)
+	difference = today - sitedate
+
+	#Return False if it is older than 4 weeks old
+	if difference.days > 28:
+		return False
+	else:
+		return True
+
+
+# Getting it like this rn 'Mar 8, 2017'
+
+### Create dictionary so if an article is two weeks or younger, you can 
+### pull a small description of the article and assign it to it's corresponding 
+### url. You also don't need to worry about deleting them from the list 
+### anymore, just add them to the dictionary.
 
 for link in nulinks:
 	reqNUarticle = requests.get(link)
 	soupNUarticle = BeautifulSoup(reqNUarticle.text, 'html.parser')
 	date = soupNUarticle.find('span', class_ = 'time')
-	date = ''.join(date.strings)
-	print(date)
+	date = date.text #This gives us the date of the article as a string
+	if compareDate(date):
+		print(link)
 
 #Want to remove all the article that are over two weeks old
 
 # print(nulinks)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
