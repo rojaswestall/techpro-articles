@@ -92,19 +92,14 @@ def compareDate(datestring):
 	sitedate = datetime.date(year, month, day)
 	difference = today - sitedate
 
-	#Return False if it is older than 4 weeks old
-	if difference.days > 28:
+	#Return False if it is older than a month old
+	if difference.days > 30:
 		return False
 	else:
 		return True
 
-
-# Getting it like this rn 'Mar 8, 2017'
-
-### Create dictionary so if an article is two weeks or younger, you can 
-### pull a small description of the article and assign it to it's corresponding 
-### url. You also don't need to worry about deleting them from the list 
-### anymore, just add them to the dictionary.
+goodlinks = []
+goodsoups = []
 
 for link in nulinks:
 	reqNUarticle = requests.get(link)
@@ -112,9 +107,17 @@ for link in nulinks:
 	date = soupNUarticle.find('span', class_ = 'time')
 	date = date.text #This gives us the date of the article as a string
 	if compareDate(date):
-		print(link)
+		goodlinks.append(link) #Holding onto the links and soupobjects
+		goodsoups.append(soupNUarticle)
 
-#Want to remove all the article that are over two weeks old
+for i in range(len(goodlinks)):
+	print(goodlinks[i])
+	preview = goodsoups[i].find('p', class_ = 'bumper').text
+	print(preview + '\n' + '\n')
+
+	
+
+
 
 # print(nulinks)
 
