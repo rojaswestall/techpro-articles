@@ -1,2 +1,2 @@
 # techpro-articles
-Will generate a list of links to recent articles from selected sites that haven't yet been used by tech-pro
+Generate a list of links to recent articles from selected websites that tech-pro hasn't posted on any of its pages yet
