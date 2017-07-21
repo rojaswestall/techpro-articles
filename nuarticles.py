@@ -4,7 +4,7 @@ import datetime
 from remove_duplicates_from_list import removeDuplicates
 
 ####
-#### Northwestern Insight KELLOGG School of Managment Website ####
+#### Northwestern University Insight KELLOGG School of Managment ####
 ####
 
 reqStrategy = requests.get('https://insight.kellogg.northwestern.edu/browse/topic/strategy')
@@ -21,7 +21,7 @@ soupLeadership = BeautifulSoup(reqLeadership.text, 'html.parser')
 
 reqTrust = requests.get('https://insight.kellogg.northwestern.edu/browse/topic/trust')
 soupTrust = BeautifulSoup(reqTrust.text, 'html.parser')
-#Only pulling articles from the strategy, careers, culture, leadership, and trust categories
+# Only pulling articles from the strategy, careers, culture, leadership, and trust categories
 
 nulinks = []
 
@@ -45,20 +45,21 @@ for li in soupTrust.find_all('li', class_ = 'with-image'):
 	atag = li.find_next('a')
 	link = atag.get('href')
 	nulinks.append(link)
-#Adds the second half of the url for an article to nulinks
+# Adds the second half of the url for an article to the list nulinks
 
 nulinks = removeDuplicates(nulinks)
 nulinks = ['https://insight.kellogg.northwestern.edu' + link for link in nulinks]
-#nulinks is now a list of urls for all useful articles on the site without any repeats
+# nulinks is now a list of urls for all useful articles on the site without any repeats
 
 
 today = datetime.date.today()
+
 def compareDate(datestring):
 	monthstr = datestring[1:4]
 	daystr = datestring[5]
 	yearstr = datestring[8:12]
 
-	#Converting the month to an int
+	# Converting the month to an int
 	if monthstr == 'Jan':
 		month = 1
 	elif monthstr == 'Feb':
@@ -84,16 +85,16 @@ def compareDate(datestring):
 	elif monthstr == 'Dec':
 		month = 12
 
-	#Converting the day and year to ints
+	# Converting the day and year to ints
 	day = int(daystr)
 	year = int(yearstr)
 
-	#Finding the difference in days between today and each article
+	# Finding the difference in days between today and each article
 	sitedate = datetime.date(year, month, day)
 	difference = today - sitedate
 
-	#Return False if it is older than a month old
-	if difference.days > 30:
+	# Return True if it is younger than 40 days old
+	if difference.days > 40:
 		return False
 	else:
 		return True
@@ -105,21 +106,16 @@ for link in nulinks:
 	reqNUarticle = requests.get(link)
 	soupNUarticle = BeautifulSoup(reqNUarticle.text, 'html.parser')
 	date = soupNUarticle.find('span', class_ = 'time')
-	date = date.text #This gives us the date of the article as a string
+	date = date.text # This gives us the date of the article as a string
 	if compareDate(date):
-		goodlinks.append(link) #Holding onto the links and soupobjects
+		goodlinks.append(link) # Holding onto the links and soupobjects
 		goodsoups.append(soupNUarticle)
 
+# Printing out the links and descriptions for each article
 for i in range(len(goodlinks)):
 	print(goodlinks[i])
 	preview = goodsoups[i].find('p', class_ = 'bumper').text
 	print(preview + '\n' + '\n')
-
-	
-
-
-
-# print(nulinks)
 
 
 
