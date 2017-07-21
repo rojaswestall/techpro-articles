@@ -115,7 +115,7 @@ for link in nulinks:
 for i in range(len(goodlinks)):
 	print(goodlinks[i])
 	preview = goodsoups[i].find('p', class_ = 'bumper').text
-	print(preview + '\n' + '\n')
+	print(preview[1:] + '\n' + '\n')
 
 
 

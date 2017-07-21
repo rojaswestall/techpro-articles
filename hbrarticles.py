@@ -50,17 +50,17 @@ today = datetime.date.today()
 def compareDate(urlstring):
 	year = int(urlstring[1:5])
 	month = int(urlstring[6:8])
-	day = 1
-	# Always assuming that the article was written on the first so we don't need to 
+	day = 15
+	# Always assuming that the article was written on the fifteenth so we don't need to 
 	# run BeautifulSoup on it's link. Instead we take the date from the url
 
 	# Finding the difference in days between today and each article
 	sitedate = datetime.date(year, month, day)
 	difference = today - sitedate
 
-	# Becuase we always assume the articles were written on the 1st, return True if 
-	# it is newer than 60 days old
-	if difference.days > 60:
+	# Becuase we always assume the articles were written on the 15th, return True if 
+	# it is newer than 45 days old
+	if difference.days > 45:
 		return False
 	else:
 		return True
@@ -69,9 +69,8 @@ goodlinks = []
 goodsoups = []
 
 for i in range(len(hbrlinks)):
-	print(hbrlinks[i])
 	if hbrlinks[i][1:6] == 'video' or hbrlinks[i][1:8] == 'product' or hbrlinks[i][1:10] == 'sponsored':
-		print('Not a good link')
+		continue
 	elif compareDate(hbrlinks[i]):
 		link = 'https://hbr.org' + hbrlinks[i]
 
@@ -83,6 +82,8 @@ for i in range(len(hbrlinks)):
 
 for i in range(len(goodlinks)):
 	print(goodlinks[i])
+	preview = goodsoups[i].find('div', class_ = 'article-first-row').find_next('p').text
+	print(preview + '\n' + '\n')
 
 
 
